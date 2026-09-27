@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sarthi — Indian Standards Assistant</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+
+  <!-- Top Tricolor Accent Stripe -->
+  <div class="tricolor-stripe">
+    <div class="stripe saffron"></div>
+    <div class="stripe white"></div>
+    <div class="stripe green"></div>
+  </div>
+
+  <div class="sarthi-app">
+
+    <!-- 1. POPUP HEADER -->
+    <header class="sarthi-header">
+      <div class="header-left">
+        <div class="sarthi-logo-badge">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="sarthi-compass">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+          </svg>
+        </div>
+        <div class="header-titles">
+          <div class="brand-line">
+            <span class="brand-sarthi">SARTHI</span>
+          </div>
+          <div class="brand-subtitle">Indian Standards Assistant</div>
+          <div class="brand-powered">Powered by MargDarshak</div>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <!-- Connection Status Indicator -->
+        <div id="connection-status" class="status-indicator online" title="Backend Connection: Connected">
+          <span class="status-dot"></span>
+          <span class="status-label">Connected</span>
+        </div>
+
+        <button id="notif-btn" class="icon-btn" title="System Notifications" aria-label="Notifications">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+          </svg>
+        </button>
+
+        <button id="settings-btn" class="icon-btn" title="Sarthi Settings & Connection" aria-label="Settings">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+        </button>
+
+        <div class="user-avatar" title="Procurement Officer: Shri R. K. Sharma">PO</div>
+      </div>
+    </header>
+
+    <!-- Institutional Navigation Bar -->
+    <nav class="sarthi-nav">
+      <button class="nav-tab active" data-tab="analyze">Requirement</button>
+      <button class="nav-tab" data-tab="standards">Standards</button>
+      <button class="nav-tab" data-tab="normative">Normative</button>
+      <button class="nav-tab" data-tab="compliance">Compliance</button>
+      <button class="nav-tab" data-tab="evidence">Evidence</button>
+      <button class="nav-tab" data-tab="tender">Tender</button>
+      <button class="nav-tab" data-tab="ai-saathi">AI Saathi</button>
+    </nav>
+
+    <!-- Notifications Drawer (Hidden by default) -->
+    <div id="notif-drawer" class="drawer-panel hidden">
+      <div class="drawer-header">
+        <span class="drawer-title">System Notifications</span>
+        <button id="notif-close" class="close-text-btn">✕</button>
+      </div>
+      <div class="drawer-body">
+        <div class="notif-item">
+          <span class="notif-badge-verified">VERIFIED</span>
+          <div class="notif-text">BIS 2026 Gazette Quality Control Orders synchronized. 21,480 Standards active.</div>
+          <span class="notif-time">Just now</span>
+        </div>
+        <div class="notif-item">
+          <span class="notif-badge-info">NOTICE</span>
+          <div class="notif-text">GFR 2017 Rule 144(i) audit mode active for public procurement tenders.</div>
+          <span class="notif-time">Session start</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Settings Modal (Hidden by default) -->
+    <div id="settings-modal" class="drawer-panel hidden">
+      <div class="drawer-header">
+        <span class="drawer-title">Sarthi Institutional Settings</span>
+        <button id="settings-close" class="close-text-btn">✕</button>
+      </div>
+      <div class="drawer-body space-y">
+        <div class="setting-group">
+          <label class="setting-label">Official User Profile:</label>
+          <div class="user-profile-card">
+            <div class="profile-name">Shri R. K. Sharma (Procurement Officer)</div>
+            <div class="profile-sub">CPWD • National Procurement Division • rk.sharma.proc@gov.in</div>
+          </div>
+        </div>
+
+        <div class="setting-group">
+          <label for="backend-url-input" class="setting-label">MargDarshak Backend API Endpoint:</label>
+          <input type="text" id="backend-url-input" class="sarthi-input" value="http://localhost:3000/api" placeholder="http://localhost:3000/api">
+          <span class="setting-hint">Used for semantic search, document chunking & QCO validation.</span>
+        </div>
+
+        <div class="setting-group">
+          <label for="language-select" class="setting-label">Institutional Language:</label>
+          <select id="language-select" class="sarthi-select">
+            <option value="en">English (Official Standards Specification)</option>
+            <option value="hi">हिंदी (Hindi - मानक सहायक)</option>
+            <option value="mr">मराठी (Marathi)</option>
+            <option value="bn">বাংলা (Bengali)</option>
+            <option value="ta">தமிழ் (Tamil)</option>
+          </select>
+        </div>
+
+        <div class="setting-group">
+          <div class="privacy-note">
+            <strong>Privacy & Security Notice:</strong> Sarthi processes only content explicitly selected or uploaded by the user. No automatic background webpage scraping or tracking is performed.
+          </div>
+        </div>
+
+        <button id="save-settings-btn" class="btn-primary btn-full">Save Configuration</button>
+      </div>
+    </div>
+
+    <!-- MAIN APPLICATION CONTAINER -->
+    <main class="sarthi-main">
+
+      <!-- ====================================================
+           VIEW 1: SELECTED TEXT ANALYSIS & HOME
+      ==================================================== -->
+      <section id="view-analyze" class="view-content active">
+        
+        <!-- Explanation Note -->
+        <div class="info-banner">
+          <div class="info-icon">📋</div>
+          <div class="info-desc">
+            Select technical requirements from any webpage or upload a procurement document to identify relevant Indian Standards.
+          </div>
+        </div>
+
+        <!-- Selected Requirement Box -->
+        <div class="section-block">
+          <div class="block-header">
+            <span class="block-title">SELECTED REQUIREMENT</span>
+            <div class="block-actions">
+              <span id="char-counter" class="char-count">0 chars</span>
+              <button id="edit-req-btn" class="btn-text">Edit Text</button>
+              <button id="clear-req-btn" class="btn-text text-danger">Clear</button>
+            </div>
+          </div>
+
+          <textarea 
+            id="requirement-textarea" 
+            class="sarthi-textarea" 
+            rows="3" 
+            placeholder="Highlight technical requirements or product specs on any webpage (GeM, CPPP, State Portals), or type / paste here..."
+          ></textarea>
+        </div>
+
+        <!-- Document Upload Component (Multi-Format Drag & Drop) -->
+        <div class="section-block">
+          <div class="block-header">
+            <span class="block-title">OR UPLOAD PROCUREMENT DOCUMENT</span>
+          </div>
+
+          <div id="drop-zone" class="drop-zone">
+            <input type="file" id="document-file-input" class="hidden-file-input" accept=".pdf,.doc,.docx,.txt,.xls,.xlsx,.ppt,.pptx,.png,.jpg,.jpeg">
+            <div class="drop-zone-content">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" class="drop-icon">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+              <div class="drop-text-primary">Drop procurement document here</div>
+              <div class="drop-text-sub">PDF • DOCX • XLSX • PPTX • Images</div>
+              <button id="choose-file-btn" class="btn-secondary btn-sm" type="button">Choose File</button>
+            </div>
+          </div>
+
+          <!-- Document Processing Progress Indicator -->
+          <div id="doc-progress-card" class="progress-card hidden">
+            <div class="progress-header">
+              <span id="doc-filename" class="doc-title">Tender_Spec_Document.pdf</span>
+              <span id="doc-stage-label" class="stage-label">Extracting…</span>
+            </div>
+            <div class="progress-track">
+              <div id="progress-bar" class="progress-fill" style="width: 45%;"></div>
+            </div>
+            <div class="stages-indicator">
+              <span class="stage-step done" id="stage-upload">Uploading</span>
+              <span class="stage-step active" id="stage-extract">Extracting</span>
+              <span class="stage-step" id="stage-analyze">Analyzing</span>
+              <span class="stage-step" id="stage-search">Searching</span>
+              <span class="stage-step" id="stage-verify">Verifying</span>
+              <span class="stage-step" id="stage-complete">Completed</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Primary Action Button -->
+        <div class="action-row">
+          <button id="check-sarthi-btn" class="btn-primary btn-full">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <span>Check with Sarthi</span>
+          </button>
+        </div>
+
+        <!-- Loading State -->
+        <div id="sarthi-loading" class="state-card loading-state hidden">
+          <div class="sarthi-spinner"></div>
+          <div class="state-title">Analyzing Requirement…</div>
+          <div class="state-desc">Mapping technical parameters against 21,000+ Indian Standards (IS), Gazette QCO mandates, and GFR 144(i) compliance rules.</div>
+        </div>
+
+        <!-- Error State -->
+        <div id="sarthi-error" class="state-card error-state hidden">
+          <div class="error-badge">⚠️ ANALYSIS FAILED</div>
+          <div id="error-text" class="error-desc">Unable to connect to MargDarshak service.</div>
+          <button id="error-retry-btn" class="btn-secondary btn-sm">Retry Analysis</button>
+        </div>
+
+        <!-- ====================================================
+             REQUIREMENT EXTRACTION & AUDIT RESULTS
+        ==================================================== -->
+        <div id="extraction-results-wrapper" class="results-wrapper hidden">
+          
+          <!-- Outdated Reference Warning Alert (if detected) -->
+          <div id="outdated-alert-card" class="warning-alert-card hidden">
+            <div class="alert-title-row">
+              <span class="alert-icon">⚠️</span>
+              <span class="alert-title">OUTDATED STANDARD REFERENCE DETECTED</span>
+            </div>
+            <div class="alert-body">
+              <div class="ref-compare-row">
+                <div>
+                  <span class="ref-label">Referenced in text:</span>
+                  <div id="outdated-referenced" class="ref-code-old">IS 10322:1982</div>
+                </div>
+                <div class="ref-arrow">➔</div>
+                <div>
+                  <span class="ref-label">Current Verified Version:</span>
+                  <div id="outdated-current" class="ref-code-new">IS 10322 (Part 5/Sec 3):2012</div>
+                </div>
+              </div>
+              <div id="outdated-changes" class="ref-changes-text">Major revision incorporating solid-state LED luminaire photometrics and isolation.</div>
+              <div class="ref-actions">
+                <button id="replace-ref-btn" class="btn-primary btn-xs">Replace Reference</button>
+                <button id="keep-ref-btn" class="btn-secondary btn-xs">Keep Existing</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Structured Requirement Table -->
+          <div class="section-block">
+            <div class="block-header">
+              <span class="block-title">STRUCTURED REQUIREMENT EXTRACTION</span>
+              <button id="edit-structured-btn" class="btn-text">Edit Requirements</button>
+            </div>
+
+            <table class="sarthi-table">
+              <tbody>
+                <tr>
+                  <td class="table-key">PRODUCT / CATEGORY</td>
+                  <td id="ext-product" class="table-val">Water Storage Tank</td>
+                </tr>
+                <tr>
+                  <td class="table-key">APPLICATION</td>
+                  <td id="ext-application" class="table-val">Institutional use</td>
+                </tr>
+                <tr>
+                  <td class="table-key">MATERIAL</td>
+                  <td id="ext-material" class="table-val">Stainless Steel</td>
+                </tr>
+                <tr>
+                  <td class="table-key">CAPACITY</td>
+                  <td id="ext-capacity" class="table-val">1000 litre</td>
+                </tr>
+                <tr>
+                  <td class="table-key">QUANTITY</td>
+                  <td id="ext-quantity" class="table-val">Not specified</td>
+                </tr>
+                <tr>
+                  <td class="table-key">INSTALLATION</td>
+                  <td id="ext-installation" class="table-val">Required</td>
+                </tr>
+                <tr>
+                  <td class="table-key">OTHER REQUIREMENTS</td>
+                  <td id="ext-other" class="table-val">Food Grade inert lining</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Missing & Ambiguous Requirements Audit -->
+          <div id="missing-req-block" class="section-block">
+            <div class="block-header">
+              <span class="block-title">MISSING & AMBIGUOUS REQUIREMENTS AUDIT</span>
+            </div>
+            <div id="missing-items-list" class="missing-list">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <!-- Continue Action -->
+          <div class="action-row">
+            <button id="continue-to-standards-btn" class="btn-primary btn-full">
+              <span>Continue to Recommended Standards ➔</span>
+            </button>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- ====================================================
+           VIEW 2: RECOMMENDED STANDARDS & DETAILS
+      ==================================================== -->
+      <section id="view-standards" class="view-content hidden">
+        
+        <div class="section-block">
+          <div class="block-header">
+            <span class="block-title">RECOMMENDED INDIAN STANDARDS</span>
+            <span id="standards-count-badge" class="badge-count">1 Standard</span>
+          </div>
+
+          <!-- Top Recommended Standard Primary Card -->
+          <div class="standard-primary-card">
+            <div class="std-top-bar">
+              <span class="std-badge-primary">PRIMARY RECOMMENDATION</span>
+              <span id="std-relevance-pill" class="rel-pill high">High Relevance (96%)</span>
+            </div>
+
+            <div id="std-is-number" class="std-number-title">IS 10322 (Part 5/Sec 3):2012</div>
+            <div id="std-is-title" class="std-title-desc">Luminaires - Particular Requirements: Luminaires for Road and Street Lighting</div>
+
+            <div class="std-meta-row">
+              <div><strong>Status:</strong> <span id="std-status" class="status-green">ACTIVE</span></div>
+              <div><strong>Version:</strong> <span id="std-version">Reaffirmed 2024</span></div>
+              <div><strong>Source:</strong> Verified BIS Knowledge Base</div>
+            </div>
+
+            <!-- Reason -->
+            <div class="std-section-box">
+              <div class="box-label">RELEVANCE EXPLANATION</div>
+              <div id="std-reason" class="box-text">Primary standard governing outdoor LED & conventional road lighting luminaires, ingress protection (IP65/IP66), and optical distribution.</div>
+            </div>
+
+            <!-- Coverage Tags -->
+            <div class="coverage-row">
+              <span class="coverage-label">Coverage:</span>
+              <div id="coverage-tags-list" class="coverage-tags">
+                <span class="cov-tag">Product</span>
+                <span class="cov-tag">Material</span>
+                <span class="cov-tag">Testing</span>
+                <span class="cov-tag">Safety</span>
+                <span class="cov-tag">Installation</span>
+              </div>
+            </div>
+
+            <!-- Standard Actions -->
+            <div class="std-actions-row">
+              <button id="btn-view-std-details" class="btn-secondary btn-sm">View Details</button>
+              <button id="btn-view-std-source" class="btn-secondary btn-sm">View Source Evidence</button>
+              <button id="btn-add-to-tender" class="btn-primary btn-sm">Add to Tender</button>
+            </div>
+          </div>
+
+          <!-- Structured Standard 11 Sections Accordion -->
+          <div id="std-accordion-wrapper" class="accordion-wrapper hidden">
+            <div class="accordion-item"><button class="acc-toggle">01 Scope ▾</button><div id="sec-01-scope" class="acc-body"></div></div>
+            <div class="accordion-item"><button class="acc-toggle">02 Product Requirements ▾</button><div id="sec-02-prod" class="acc-body"></div></div>
+            <div class="accordion-item"><button class="acc-toggle">03 Technical Requirements ▾</button><div id="sec-03-tech" class="acc-body"></div></div>
+            <div class="accordion-item"><button class="acc-toggle">04 Testing Requirements ▾</button><div id="sec-04-test" class="acc-body"></div></div>
+            <div class="accordion-item"><button class="acc-toggle">05 Safety Requirements ▾</button><div id="sec-05-safe" class="acc-body"></div></div>
+            <div class="accordion-item"><button class="acc-toggle">06 Marking & Labelling ▾</button><div id="sec-06-mark" class="acc-body"></div></div>
+            <div class="accordion-item"><button class="acc-toggle">07 Certification & QCO ▾</button><div id="sec-07-cert" class="acc-body"></div></div>
+            <div class="accordion-item"><button class="acc-toggle">08 Amendments ▾</button><div id="sec-08-amend" class="acc-body"></div></div>
+            <div class="accordion-item"><button class="acc-toggle">09 Normative References ▾</button><div id="sec-09-norm" class="acc-body"></div></div>
+            <div class="accordion-item"><button class="acc-toggle">10 Related Standards ▾</button><div id="sec-10-rel" class="acc-body"></div></div>
+            <div class="accordion-item"><button class="acc-toggle">11 Source Documents ▾</button><div id="sec-11-src" class="acc-body"></div></div>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- ====================================================
+           VIEW 3: NORMATIVE & RELATED STANDARDS
+      ==================================================== -->
+      <section id="view-normative" class="view-content hidden">
+        <div class="section-block">
+          <div class="block-header">
+            <span class="block-title">RELATED & NORMATIVE STANDARDS</span>
+          </div>
+
+          <div id="normative-cards-list" class="normative-list space-y">
+            <!-- Dynamically injected normative standards -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================
+           VIEW 4: CERTIFICATION & COMPLIANCE
+      ==================================================== -->
+      <section id="view-compliance" class="view-content hidden">
+        <div class="section-block">
+          <div class="block-header">
+            <span class="block-title">CERTIFICATION & COMPLIANCE VERIFICATION</span>
+          </div>
+
+          <div class="compliance-panel">
+            <div class="comp-item-card">
+              <div class="comp-top">
+                <span class="comp-name">BIS Product Certification (ISI Mark Scheme-I)</span>
+                <span class="comp-status-badge applicable">Applicable</span>
+              </div>
+              <div class="comp-reason">Mandatory under Quality Control Order. Bidders must hold valid BIS CM/L license number embossed on each item.</div>
+              <div class="comp-source">Source: Department for Promotion of Industry and Internal Trade (DPIIT) Gazette QCO</div>
+            </div>
+
+            <div class="comp-item-card">
+              <div class="comp-top">
+                <span class="comp-name">MeitY Compulsory Registration Scheme (CRS Scheme-II)</span>
+                <span class="comp-status-badge applicable">Applicable</span>
+              </div>
+              <div class="comp-reason">Applies to internal electronic controlgear / LED driver components with valid R-Number.</div>
+              <div class="comp-source">Source: Ministry of Electronics and Information Technology (MeitY) Order</div>
+            </div>
+
+            <div class="comp-item-card">
+              <div class="comp-top">
+                <span class="comp-name">General Financial Rules 2017 - Rule 144(i)</span>
+                <span class="comp-status-badge applicable">Statutory Mandate</span>
+              </div>
+              <div class="comp-reason">Mandatory adoption of Bureau of Indian Standards specifications in all public procurement tenders.</div>
+              <div class="comp-source">Source: Ministry of Finance, Department of Expenditure, GFR 2017</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================
+           VIEW 5: SOURCE EVIDENCE VIEWER
+      ==================================================== -->
+      <section id="view-evidence" class="view-content hidden">
+        <div class="section-block">
+          <div class="block-header">
+            <span class="block-title">TRACEABLE SOURCE EVIDENCE</span>
+            <span id="evidence-confidence-badge" class="badge-confidence verified">VERIFIED EVIDENCE</span>
+          </div>
+
+          <div class="evidence-viewer-card">
+            <div class="ev-meta-grid">
+              <div><strong>Document:</strong> <span id="ev-doc">IS_10322_Part5_Sec3.pdf</span></div>
+              <div><strong>Page:</strong> <span id="ev-page">14</span></div>
+              <div><strong>Section:</strong> <span id="ev-section">5.2 Photometric & 8.1 Ingress</span></div>
+            </div>
+
+            <div class="ev-quote-box">
+              <div class="ev-quote-label">Verified BIS Source Extract:</div>
+              <div id="ev-text" class="ev-quote-text">
+                “Luminaires for road and street lighting shall provide not less than IP65 protection for the optical system. For municipal road applications, IP66 enclosure protection and 120 lm/W luminous efficacy shall be verified.”
+              </div>
+            </div>
+
+            <div class="ev-actions">
+              <a id="ev-bis-link" href="https://www.services.bis.gov.in/" target="_blank" class="btn-secondary btn-sm">Open BIS Source Document ↗</a>
+              <button id="copy-citation-btn" class="btn-secondary btn-sm">Copy Citation</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================
+           VIEW 6: TENDER BUILDER & READINESS
+      ==================================================== -->
+      <section id="view-tender" class="view-content hidden">
+        <div class="section-block">
+          <div class="block-header">
+            <span class="block-title">TENDER SPECIFICATION BUILDER</span>
+          </div>
+
+          <!-- Tender Readiness Audit Card -->
+          <div class="readiness-card">
+            <div class="readiness-header">
+              <span class="readiness-title">TENDER READINESS AUDIT</span>
+              <span class="readiness-badge warning">2 items require review</span>
+            </div>
+            <div class="readiness-items">
+              <div class="read-item done">✓ Product identified (LED Street Lighting)</div>
+              <div class="read-item done">✓ Applicable Standards identified (IS 10322)</div>
+              <div class="read-item done">✓ Normative references checked</div>
+              <div class="read-item done">✓ Statutory Certification verified (ISI / CRS)</div>
+              <div class="read-item review">⚠ Testing requirements require officer review</div>
+              <div class="read-item review">⚠ Inspection & Acceptance criteria missing in draft</div>
+            </div>
+          </div>
+
+          <!-- GFR 144(i) Tender Clause Box -->
+          <div class="section-block">
+            <div class="block-header">
+              <span class="block-title">GFR 2017 RULE 144(i) COMPLIANT TENDER CLAUSE</span>
+              <button id="copy-tender-clause-btn" class="btn-text">📋 Copy Clause</button>
+            </div>
+            <div id="tender-clause-text" class="tender-clause-box">
+              All supplied 90W LED Street Light Luminaires shall strictly comply with IS 10322 (Part 5/Sec 3):2012 and IS 16107 (Part 2/Sec 1). The bidder must hold a valid BIS Compulsory Registration (CRS) R-Number and submit NABL accredited test certificates for IP66 ingress protection and 120 lm/W luminous efficacy.
+            </div>
+          </div>
+
+          <!-- PDF Export Action -->
+          <div class="action-row">
+            <button id="generate-pdf-btn" class="btn-primary btn-full">
+              📄 Generate Tender Specification PDF
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================
+           VIEW 7: GROUNDED AI SAATHI ASSISTANT
+      ==================================================== -->
+      <section id="view-ai-saathi" class="view-content hidden">
+        <div class="section-block">
+          <div class="block-header">
+            <span class="block-title">AI SAATHI (GROUNDED STANDARDS ASSISTANT)</span>
+          </div>
+
+          <div class="saathi-chat-box">
+            <div class="saathi-intro-card">
+              Ask any factual question regarding standards, test requirements, GFR 144(i) mandates, or Quality Control Orders. Every answer is grounded in verified BIS citations.
+            </div>
+
+            <div class="sample-questions-wrap">
+              <div class="sample-q-label">Suggested Queries:</div>
+              <button class="sample-q-btn" data-q="Why was this standard recommended?">Why was this standard recommended?</button>
+              <button class="sample-q-btn" data-q="What testing method and NABL protocols apply?">What testing method and NABL protocols apply?</button>
+              <button class="sample-q-btn" data-q="What is the statutory penalty for QCO non-compliance?">What is the statutory penalty for QCO non-compliance?</button>
+            </div>
+
+            <form id="saathi-chat-form" class="saathi-input-form">
+              <input type="text" id="saathi-chat-input" class="sarthi-input" placeholder="Ask AI Saathi about this standard or requirement..." autocomplete="off">
+              <button type="submit" class="btn-primary btn-sm">Ask</button>
+            </form>
+
+            <div id="saathi-reply-container" class="saathi-reply-card hidden">
+              <div class="reply-header">
+                <span class="reply-title">AI Saathi Grounded Answer</span>
+                <span id="reply-citation-badge" class="badge-confidence verified">VERIFIED CITATION</span>
+              </div>
+              <div id="saathi-reply-text" class="reply-body"></div>
+              <div class="reply-citation-footer">
+                <strong>Source:</strong> <span id="saathi-citation-doc">IS_10322.pdf</span> • Section: <span id="saathi-citation-sec">5.2</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="sarthi-footer">
+      <div class="footer-content">
+        <span>Powered by <strong>MargDarshak</strong> | BIS Standards Knowledge Base</span>
+        <a href="http://localhost:3000/" target="_blank" class="footer-portal-link">Open Full Workspace ↗</a>
+      </div>
+    </footer>
+
+  </div>
+
+  <script type="module" src="popup.js"></script>
+</body>
+</html>

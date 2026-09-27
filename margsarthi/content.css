@@ -1,0 +1,379 @@
+/* SARTHI Content Script Stylesheet — Institutional Design System */
+
+#sarthi-floating-pill {
+  position: fixed !important;
+  z-index: 2147483647 !important;
+  pointer-events: auto !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif !important;
+}
+
+.sarthi-pill-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  background-color: #0A2540 !important;
+  color: #FFFFFF !important;
+  border: 1px solid #1E3A8A !important;
+  box-shadow: 0 4px 12px rgba(10, 37, 64, 0.28) !important;
+  padding: 6px 12px !important;
+  border-radius: 6px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: all 0.14s ease !important;
+  white-space: nowrap !important;
+}
+
+.sarthi-pill-btn:hover {
+  background-color: #1D4ED8 !important;
+  border-color: #2563EB !important;
+  box-shadow: 0 6px 16px rgba(10, 37, 64, 0.38) !important;
+  transform: translateY(-1px) !important;
+}
+
+.sarthi-pill-svg {
+  color: #60A5FA !important;
+  shrink: 0 !important;
+}
+
+/* In-Page Modal Overlay */
+#sarthi-modal-overlay {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  background-color: rgba(10, 25, 47, 0.65) !important;
+  backdrop-filter: blur(2px) !important;
+  -webkit-backdrop-filter: blur(2px) !important;
+  z-index: 2147483647 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 16px !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif !important;
+}
+
+.sarthi-dialog-card {
+  background-color: #FFFFFF !important;
+  width: 100% !important;
+  max-width: 540px !important;
+  max-height: 88vh !important;
+  border-radius: 8px !important;
+  box-shadow: 0 20px 40px rgba(10, 37, 64, 0.28), 0 0 0 1px rgba(10, 37, 64, 0.1) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+}
+
+.sarthi-dialog-head {
+  background-color: #0A2540 !important;
+  color: #FFFFFF !important;
+  padding: 12px 16px !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.sarthi-dialog-brand {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+
+.sarthi-head-icon {
+  background-color: #1D4ED8 !important;
+  padding: 5px !important;
+  border-radius: 5px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.sarthi-dialog-title {
+  font-size: 13.5px !important;
+  font-weight: 700 !important;
+}
+
+.sarthi-dialog-sub {
+  font-size: 10px !important;
+  color: #94A3B8 !important;
+}
+
+.sarthi-modal-close {
+  background: none !important;
+  border: none !important;
+  color: #94A3B8 !important;
+  font-size: 16px !important;
+  cursor: pointer !important;
+  padding: 4px !important;
+}
+
+.sarthi-modal-close:hover {
+  color: #FFFFFF !important;
+}
+
+.sarthi-dialog-body {
+  padding: 14px 16px !important;
+  overflow-y: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  background-color: #F8FAFC !important;
+}
+
+.sarthi-group {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 3px !important;
+}
+
+.sarthi-group-label {
+  font-size: 9.5px !important;
+  font-weight: 700 !important;
+  color: #64748B !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.3px !important;
+}
+
+.sarthi-quote-box {
+  background-color: #FFFFFF !important;
+  border-left: 3px solid #1E3A8A !important;
+  border-top: 1px solid #D9E2EC !important;
+  border-right: 1px solid #D9E2EC !important;
+  border-bottom: 1px solid #D9E2EC !important;
+  border-radius: 0 4px 4px 0 !important;
+  padding: 8px 10px !important;
+  font-size: 11.5px !important;
+  color: #1E293B !important;
+  line-height: 1.4 !important;
+  font-style: italic !important;
+}
+
+/* Loading State */
+.sarthi-loading-state {
+  background-color: #FFFFFF !important;
+  border: 1px solid #D9E2EC !important;
+  border-radius: 6px !important;
+  padding: 24px 16px !important;
+  text-align: center !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.sarthi-spinner {
+  width: 24px !important;
+  height: 24px !important;
+  border: 3px solid #E2E8F0 !important;
+  border-top-color: #2563EB !important;
+  border-radius: 50% !important;
+  animation: sarthi-spin 0.7s linear infinite !important;
+}
+
+@keyframes sarthi-spin {
+  to { transform: rotate(360deg); }
+}
+
+.sarthi-loading-title {
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  color: #0A2540 !important;
+}
+
+.sarthi-loading-sub {
+  font-size: 10.5px !important;
+  color: #64748B !important;
+}
+
+.sarthi-rec-card {
+  background-color: #FFFFFF !important;
+  border: 1px solid #D9E2EC !important;
+  border-radius: 6px !important;
+  padding: 12px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+}
+
+.sarthi-card-top {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+}
+
+.sarthi-card-badge {
+  font-size: 9px !important;
+  font-weight: 800 !important;
+  color: #0A2540 !important;
+}
+
+.sarthi-rel-pill {
+  font-size: 9.5px !important;
+  font-weight: 700 !important;
+  background-color: #ECFDF5 !important;
+  color: #059669 !important;
+  border: 1px solid #A7F3D0 !important;
+  padding: 1.5px 5px !important;
+  border-radius: 3px !important;
+}
+
+.sarthi-rec-num {
+  font-size: 14px !important;
+  font-weight: 800 !important;
+  color: #0A2540 !important;
+}
+
+.sarthi-rec-title {
+  font-size: 11.5px !important;
+  font-weight: 600 !important;
+  color: #1E293B !important;
+  line-height: 1.35 !important;
+}
+
+.sarthi-rec-reason {
+  font-size: 11px !important;
+  color: #334155 !important;
+  background-color: #F8FAFC !important;
+  padding: 6px 8px !important;
+  border-radius: 4px !important;
+  border: 1px solid #D9E2EC !important;
+  line-height: 1.35 !important;
+}
+
+.sarthi-param-grid {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 4px !important;
+  background-color: #F8FAFC !important;
+  border: 1px solid #D9E2EC !important;
+  padding: 6px !important;
+  border-radius: 4px !important;
+}
+
+.sarthi-param-item {
+  font-size: 10.5px !important;
+  color: #475569 !important;
+}
+
+.sarthi-param-item span {
+  color: #64748B !important;
+}
+
+.sarthi-comp-box {
+  background-color: #FFFBEB !important;
+  border: 1px solid #FDE68A !important;
+  border-radius: 4px !important;
+  padding: 6px 8px !important;
+  font-size: 11px !important;
+  color: #78350F !important;
+  line-height: 1.35 !important;
+}
+
+.sarthi-clause-box {
+  background-color: #0F172A !important;
+  color: #F8FAFC !important;
+  padding: 8px 10px !important;
+  border-radius: 4px !important;
+  font-size: 10.5px !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+  line-height: 1.4 !important;
+  user-select: all !important;
+}
+
+/* Ask Box */
+.sarthi-ask-box {
+  display: flex !important;
+  gap: 4px !important;
+}
+
+.sarthi-inpage-input {
+  flex: 1 !important;
+  padding: 5px 8px !important;
+  font-size: 11px !important;
+  border: 1px solid #CBD5E1 !important;
+  border-radius: 4px !important;
+}
+
+.sarthi-inpage-ask-btn {
+  background-color: #2563EB !important;
+  color: #FFFFFF !important;
+  border: none !important;
+  border-radius: 4px !important;
+  padding: 5px 10px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+}
+
+.sarthi-ask-reply-box {
+  background-color: #EFF6FF !important;
+  border: 1px solid #BFDBFE !important;
+  border-radius: 4px !important;
+  padding: 6px 8px !important;
+  font-size: 10.5px !important;
+  color: #1E3A8A !important;
+  line-height: 1.35 !important;
+  margin-top: 4px !important;
+}
+
+.sarthi-card-actions {
+  display: flex !important;
+  gap: 6px !important;
+  margin-top: 4px !important;
+  padding-top: 6px !important;
+  border-top: 1px solid #D9E2EC !important;
+}
+
+.sarthi-btn-primary {
+  flex: 1 !important;
+  background-color: #0A2540 !important;
+  color: #FFFFFF !important;
+  border: none !important;
+  border-radius: 4px !important;
+  padding: 7px 10px !important;
+  font-size: 11.5px !important;
+  font-weight: 600 !important;
+  text-decoration: none !important;
+  text-align: center !important;
+  cursor: pointer !important;
+}
+
+.sarthi-btn-primary:hover {
+  background-color: #1D4ED8 !important;
+}
+
+.sarthi-btn-secondary {
+  flex: 1 !important;
+  background-color: #FFFFFF !important;
+  color: #0A2540 !important;
+  border: 1px solid #CBD5E1 !important;
+  border-radius: 4px !important;
+  padding: 7px 10px !important;
+  font-size: 11.5px !important;
+  font-weight: 600 !important;
+  text-decoration: none !important;
+  text-align: center !important;
+  cursor: pointer !important;
+}
+
+.sarthi-btn-secondary:hover {
+  background-color: #F8FAFC !important;
+}
+
+.sarthi-dialog-footer {
+  background-color: #FFFFFF !important;
+  border-top: 1px solid #D9E2EC !important;
+  padding: 7px 16px !important;
+  text-align: center !important;
+  font-size: 10px !important;
+  color: #64748B !important;
+}
+
+.sarthi-dialog-footer strong {
+  color: #0A2540 !important;
+}

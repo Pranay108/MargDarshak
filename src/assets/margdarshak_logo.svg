@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 200" fill="none">
+  <defs>
+    <linearGradient id="compassGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0066CC" />
+      <stop offset="100%" stop-color="#072A52" />
+    </linearGradient>
+    <linearGradient id="arrowGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0080FF" />
+      <stop offset="100%" stop-color="#004C99" />
+    </linearGradient>
+    <linearGradient id="docGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0099FF" />
+      <stop offset="100%" stop-color="#0055B3" />
+    </linearGradient>
+  </defs>
+
+  <!-- Top Compass Pin -->
+  <polygon points="190,4 195,12 185,12" fill="#0B2545" />
+
+  <!-- Circular Compass Frame -->
+  <circle cx="190" cy="50" r="38" stroke="url(#compassGrad)" stroke-width="8.5" fill="none" stroke-linecap="round" />
+
+  <!-- Overlapping Document Pages on Right -->
+  <!-- Background Page -->
+  <path d="M 215 28 L 245 42 L 245 92 L 215 80 Z" fill="none" stroke="#0077D8" stroke-width="3.5" stroke-linejoin="round" />
+  
+  <!-- Foreground Main Document -->
+  <path d="M 226 36 L 254 48 L 254 98 L 226 88 Z" fill="#FFFFFF" stroke="#0055B3" stroke-width="3.5" stroke-linejoin="round" />
+  <!-- Document Content Lines -->
+  <line x1="233" y1="58" x2="248" y2="64" stroke="#0077D8" stroke-width="2.5" stroke-linecap="round" />
+  <line x1="233" y1="67" x2="248" y2="73" stroke="#0077D8" stroke-width="2.5" stroke-linecap="round" />
+  <line x1="233" y1="76" x2="248" y2="82" stroke="#0077D8" stroke-width="2.5" stroke-linecap="round" />
+
+  <!-- Central Directional Pointer Arrow (Compass North) -->
+  <!-- Left Wing -->
+  <polygon points="190,16 170,72 190,62" fill="#0B2545" />
+  <!-- Right Wing -->
+  <polygon points="190,16 190,62 210,72" fill="#0077D8" />
+
+  <!-- Main Wordmark: MargDarshak -->
+  <text x="210" y="148" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-weight="900" font-size="44" letter-spacing="-0.8">
+    <tspan fill="#0A2342">Marg</tspan><tspan fill="#0070E0">Darshak</tspan>
+  </text>
+
+  <!-- Tagline: Right Standards. Better Procurement. -->
+  <text x="210" y="174" text-anchor="middle" fill="#2C3E50" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-weight="600" font-size="15" letter-spacing="0.2">
+    Right Standards. Better Procurement.
+  </text>
+
+  <!-- Bottom Accent Indicator Bar -->
+  <rect x="192" y="186" width="36" height="3" rx="1.5" fill="#0070E0" />
+</svg>

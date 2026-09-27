@@ -1,0 +1,206 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+
+  html,
+  body {
+    font-family: 'Noto Sans', 'Noto Sans Devanagari', 'Noto Sans Bengali', 'Noto Sans Tamil', 'Noto Sans Telugu', 'Noto Sans Gujarati', 'Noto Sans Kannada', 'Noto Sans Malayalam', 'Noto Sans Gurmukhi', 'Noto Sans Oriya', 'Noto Nastaliq Urdu', system-ui, -apple-system, sans-serif;
+    font-weight: 400;
+    color: #1e293b;
+    background-color: #f8fafc;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: 'Noto Sans', 'Noto Sans Devanagari', 'Noto Sans Bengali', 'Noto Sans Tamil', 'Noto Sans Telugu', 'Noto Sans Gujarati', 'Noto Sans Kannada', 'Noto Sans Malayalam', 'Noto Sans Gurmukhi', 'Noto Sans Oriya', 'Noto Nastaliq Urdu', system-ui, sans-serif;
+    font-weight: 700;
+  }
+
+  code,
+  kbd,
+  samp,
+  pre,
+  .font-mono {
+    font-family: 'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-weight: 500;
+  }
+}
+
+/* RTL Layout Enhancements for Urdu */
+.rtl-layout {
+  direction: rtl;
+  text-align: right;
+}
+
+.rtl-layout input,
+.rtl-layout textarea,
+.rtl-layout select {
+  text-align: right;
+}
+
+/* Keep code and numeric standards LTR even in RTL */
+.rtl-layout code,
+.rtl-layout .font-mono,
+.rtl-layout [dir="ltr"] {
+  direction: ltr;
+  text-align: left;
+  display: inline-block;
+}
+
+/* Crisp Clean Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Hide Scrollbar Utilities (Sidebar & No-Scrollbar Elements) */
+.no-scrollbar::-webkit-scrollbar,
+.custom-scrollbar::-webkit-scrollbar,
+aside::-webkit-scrollbar,
+aside *::-webkit-scrollbar {
+  display: none;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+.no-scrollbar,
+.custom-scrollbar,
+aside,
+aside * {
+  -ms-overflow-style: none !important; /* IE and Edge */
+  scrollbar-width: none !important; /* Firefox */
+}
+
+/* Light Theme Markdown Styling for AI SATHI */
+.prose-bis-light {
+  color: #334155;
+  line-height: 1.65;
+}
+
+.prose-bis-light p {
+  margin-bottom: 0.75rem;
+}
+
+.prose-bis-light p:last-child {
+  margin-bottom: 0;
+}
+
+.prose-bis-light h1,
+.prose-bis-light h2,
+.prose-bis-light h3,
+.prose-bis-light h4 {
+  color: #0f172a;
+  font-weight: 700;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.prose-bis-light ul,
+.prose-bis-light ol {
+  margin-top: 0.4rem;
+  margin-bottom: 0.75rem;
+  padding-left: 1.25rem;
+}
+
+.prose-bis-light li {
+  margin-bottom: 0.25rem;
+}
+
+.prose-bis-light ul {
+  list-style-type: disc;
+}
+
+.prose-bis-light ol {
+  list-style-type: decimal;
+}
+
+.prose-bis-light code {
+  background: #f1f5f9;
+  color: #00529b;
+  padding: 0.15rem 0.35rem;
+  border-radius: 0.25rem;
+  font-size: 0.875em;
+  border: 1px solid #e2e8f0;
+  font-family: ui-monospace, monospace;
+}
+
+.prose-bis-light pre {
+  background: #f8fafc;
+  padding: 0.875rem 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  border: 1px solid #e2e8f0;
+  margin: 0.75rem 0;
+}
+
+.prose-bis-light pre code {
+  background: transparent;
+  color: #1e293b;
+  padding: 0;
+  border: none;
+}
+
+.prose-bis-light blockquote {
+  border-left: 3px solid #00529b;
+  padding-left: 0.875rem;
+  margin: 0.75rem 0;
+  color: #64748b;
+  font-style: italic;
+  background: #f8fafc;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}
+
+.prose-bis-light table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.75rem 0;
+  font-size: 0.875em;
+}
+
+.prose-bis-light th,
+.prose-bis-light td {
+  border: 1px solid #e2e8f0;
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+
+.prose-bis-light th {
+  background: #f1f5f9;
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.prose-bis-light tr:nth-child(even) {
+  background: #f8fafc;
+}
+
+.prose-bis-light a {
+  color: #00529b;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  font-weight: 500;
+}
+
+.prose-bis-light a:hover {
+  color: #0070c7;
+}

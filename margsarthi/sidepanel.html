@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MargSarthi — Indian Standards Assistant</title>
+  <link rel="stylesheet" href="sidepanel.css">
+</head>
+<body>
+
+  <!-- Top Government Accent Stripe -->
+  <div class="tricolor-stripe">
+    <div class="stripe-saffron"></div>
+    <div class="stripe-white"></div>
+    <div class="stripe-green"></div>
+  </div>
+
+  <!-- Main Container -->
+  <div class="sidepanel-container">
+
+    <!-- 1. Header -->
+    <header class="sidepanel-header">
+      <div class="header-left">
+        <div class="brand-icon">
+          <svg class="compass-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-title">
+            <span class="title-bold">Marg</span><span class="title-accent">Sarthi</span>
+          </div>
+          <div class="brand-subtitle">Indian Standards Assistant</div>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <span class="tagline-badge">BIS & GFR 144(i)</span>
+        <button id="settings-btn" class="icon-btn" title="Settings & Backend API Configuration">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="gear-svg">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Sub-tagline strip -->
+    <div class="tagline-strip">
+      <span>Right Standards. Better Procurement.</span>
+    </div>
+
+    <!-- Settings Dropdown / Modal (Hidden by default) -->
+    <div id="settings-panel" class="settings-panel hidden">
+      <div class="settings-header">
+        <span class="settings-title">Backend API Configuration</span>
+        <button id="close-settings" class="close-text-btn">✕</button>
+      </div>
+      <div class="settings-body">
+        <label for="api-url-input" class="input-label">MargDarshak API Base URL:</label>
+        <input type="text" id="api-url-input" class="text-input" placeholder="http://localhost:3000/api" value="http://localhost:3000/api">
+        <div class="settings-note">Used for POST /api/recommend-standards. If offline, the built-in local BIS catalog is used automatically.</div>
+        <button id="save-settings-btn" class="save-btn">Save Configuration</button>
+      </div>
+    </div>
+
+    <!-- Main Scrollable Content -->
+    <main class="sidepanel-main">
+
+      <!-- 2. SELECTED REQUIREMENT CARD -->
+      <section class="section-card selected-req-section">
+        <div class="section-header">
+          <div class="section-title-wrap">
+            <span class="section-dot"></span>
+            <span class="section-title">Selected Requirement</span>
+          </div>
+          <button id="clear-selection-btn" class="clear-btn" title="Clear selection">Clear</button>
+        </div>
+
+        <div id="req-box" class="req-box">
+          <div id="req-text" class="req-text">
+            “No text selected yet. Highlight any tender specification or product description on the webpage and click <strong>✦ Find Indian Standards</strong>.”
+          </div>
+        </div>
+
+        <div class="req-actions">
+          <button id="analyze-btn" class="primary-btn">
+            <span class="btn-sparkle">✦</span>
+            <span>Analyze Requirement</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- 3. LOADING STATE -->
+      <div id="loading-state" class="state-container hidden">
+        <div class="loading-spinner"></div>
+        <div class="loading-title">Analyzing requirement…</div>
+        <div class="loading-desc">Mapping technical parameters against 21,000+ Indian Standards (IS Codes) & Gazetted QCOs.</div>
+      </div>
+
+      <!-- 4. ERROR STATE -->
+      <div id="error-state" class="state-container error-container hidden">
+        <div class="error-icon">⚠️</div>
+        <div class="error-title">Analysis Error</div>
+        <div id="error-desc" class="error-desc">Could not connect to the recommendation service.</div>
+        <button id="retry-btn" class="secondary-btn">Retry Analysis</button>
+      </div>
+
+      <!-- 5. RESULTS SECTION -->
+      <div id="results-wrapper" class="results-wrapper hidden">
+
+        <!-- Mandatory QCO Alert Banner if present -->
+        <div id="qco-alert-banner" class="qco-banner">
+          <div class="qco-badge">🛡️ STATUTORY MANDATE</div>
+          <div id="qco-text" class="qco-text">
+            Mandatory Quality Control Order (QCO) verified. Scheme-I (ISI Mark) / Scheme-II (CRS) required.
+          </div>
+        </div>
+
+        <!-- Recommended Indian Standards List -->
+        <section class="section-card">
+          <div class="section-header">
+            <span class="section-title">Recommended Indian Standards</span>
+            <span id="match-count-badge" class="count-badge">3 Standards Found</span>
+          </div>
+
+          <div id="standards-list" class="standards-list">
+            <!-- Dynamic Standard Cards Injected Here -->
+          </div>
+        </section>
+
+        <!-- Why these standards? -->
+        <section class="section-card why-card">
+          <div class="section-header">
+            <div class="why-title-wrap">
+              <span class="why-icon">💡</span>
+              <span class="section-title">Why these standards?</span>
+            </div>
+          </div>
+          <div id="why-text" class="why-body">
+            <!-- AI Explanation Injected Here -->
+          </div>
+        </section>
+
+        <!-- Related Standards -->
+        <section id="related-standards-section" class="section-card">
+          <div class="section-header">
+            <span class="section-title">Related & Normative Standards</span>
+          </div>
+          <div id="related-standards-list" class="related-list">
+            <!-- Allied Standards Injected Here -->
+          </div>
+        </section>
+
+      </div>
+
+      <!-- 6. EMPTY PROMPT ONBOARDING STATE -->
+      <div id="empty-state" class="empty-state">
+        <div class="empty-icon-box">
+          <span>🧭</span>
+        </div>
+        <div class="empty-title">Ready to Recommend Standards</div>
+        <p class="empty-desc">
+          Browse any procurement or tender webpage (GeM, CPPP, State Portals), select any technical specification, and click the floating <strong>✦ Find Indian Standards</strong> button.
+        </p>
+        <div class="sample-prompts-wrap">
+          <div class="sample-label">Or try a sample requirement:</div>
+          <button class="sample-chip" data-sample="Supply and installation of 90W LED Street Light luminaires with IP66 protection, 120 lm/W luminous efficacy, and 10kV surge protection.">
+            💡 90W LED Street Light (IP66, 120 lm/W)
+          </button>
+          <button class="sample-chip" data-sample="PE-100 Grade High Density Polyethylene (HDPE) Pipes 110mm OD, PN-10 rating for potable water distribution under Jal Jeevan Mission.">
+            🚰 HDPE Pipes PE-100 (PN-10 Water Supply)
+          </button>
+          <button class="sample-chip" data-sample="Fe 500D High Strength Deformed TMT Steel Reinforcement Bars conforming to seismic ductility criteria.">
+            🏗️ Fe 500D TMT Reinforcement Steel Rebars
+          </button>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- 7. BOTTOM: ASK MARGSARTHI INTERACTIVE INPUT -->
+    <footer class="sidepanel-footer">
+      <div class="ask-box-wrapper">
+        <div class="ask-label-row">
+          <span class="ask-label">Ask MargSarthi (Follow-up Question)</span>
+          <span class="ask-hint">e.g. GFR clause, test protocol, or QCO fine</span>
+        </div>
+        <form id="ask-form" class="ask-form">
+          <input type="text" id="ask-input" class="ask-input" placeholder="Ask about this standard or requirement..." autocomplete="off">
+          <button type="submit" id="ask-btn" class="ask-send-btn" title="Send Question">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="send-svg">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+          </button>
+        </form>
+
+        <!-- Follow-up Answer Display Card -->
+        <div id="followup-answer-card" class="followup-card hidden">
+          <div class="followup-header">
+            <span class="followup-title">MargSarthi Answer</span>
+            <button id="close-followup" class="close-text-btn">✕</button>
+          </div>
+          <div id="followup-answer-text" class="followup-text"></div>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <script type="module" src="sidepanel.js"></script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+.venv/
+
+# Environment variables (contains API keys!)
+.env
+.env.local
+.env.*.local
+
+# Build output
+dist/
+build/
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+npm-debug.log*
+
+# Chrome Extension Zips
+*.zip
