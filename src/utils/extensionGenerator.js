@@ -360,10 +360,10 @@ export async function recommendStandards(requirementText) {
       headers['Authorization'] = \`Bearer \${CONFIG.AUTH_TOKEN}\`;
     }
 
-    const res = await fetch(\`\${CONFIG.API_BASE_URL}/recommend-standards\`, {
+    const res = await fetch(\`\${CONFIG.API_BASE_URL}/api/recommend\`, {
       method: 'POST',
       headers,
-      body: JSON.stringify({ text: trimmed }),
+      body: JSON.stringify({ query: trimmed, language: "en", context: "general" }),
       signal: controller.signal
     });
 
@@ -739,8 +739,8 @@ export async function askFollowupQuestion(question, requirement, currentResults)
       </div>
       <div class="settings-body">
         <label for="api-url-input" class="input-label">MargDarshak API Base URL:</label>
-        <input type="text" id="api-url-input" class="text-input" placeholder="http://localhost:3000/api" value="http://localhost:3000/api">
-        <div class="settings-note">Used for POST /api/recommend-standards. If offline, the built-in local BIS catalog is used automatically.</div>
+        <input type="text" id="api-url-input" class="text-input" placeholder="https://margdarshak-1-kxac.onrender.com" value="https://margdarshak-1-kxac.onrender.com">
+        <div class="settings-note">Used for POST /api/recommend. If offline, the built-in local BIS catalog is used automatically.</div>
         <button id="save-settings-btn" class="save-btn">Save Configuration</button>
       </div>
     </div>

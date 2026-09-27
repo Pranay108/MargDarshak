@@ -1,7 +1,18 @@
 import { bisSystemPrompt, offlineKnowledgeFallback } from './bisKnowledge';
 import { storageService } from './storageService';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
+
 export const llmService = {
+  checkBackendHealth: async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/health`, { method: 'GET' });
+      return response.ok;
+    } catch (e) {
+      return false;
+    }
+  },
+
   /**
    * Tests the configured API key with a minimal ping.
    * Returns { success: boolean, message: string }
@@ -167,6 +178,26 @@ Return ONLY a valid JSON object (no extra commentary) with the following structu
 
     const userPrompt = `Product / Tender Requirement: "${query}"\nLanguage: ${language}\nGenerate full structured recommendation.`;
 
+    // 0. Try BACKEND API first (FastAPI at /api/recommend)
+    try {
+      const backendResponse = await fetch(`${API_BASE_URL}/api/recommend`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query, language, context: 'general' })
+      });
+      if (backendResponse.ok) {
+        const data = await backendResponse.json();
+        if (data && (data.primaryStandards?.length > 0 || data.productType)) {
+          return data;
+        }
+      } else {
+        console.warn('Backend API /api/recommend failed:', backendResponse.status);
+      }
+    } catch (e) {
+      console.warn('Backend API /api/recommend not available:', e.message);
+    }
+
+
     // 1. Try Mistral AI API first (excellent JSON mode & speed)
     const activeMistralKey = mistralKey || (apiKey && apiKey.startsWith('mstrl_') ? apiKey : 'mstrl_JrYhBG4ZdTrJrNGICinZMjm7I7mCxb8g_4gPBlb');
     if (activeMistralKey) {
@@ -267,7 +298,7 @@ Return ONLY a valid JSON object (no extra commentary) with the following structu
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 60000);
 
-      const response = await fetch('/api/chat', {
+      const response = await fetch(`${API_BASE_URL}/api/chat`, {
         method: 'POST',
         signal: controller.signal,
         headers: { 'Content-Type': 'application/json' },
@@ -275,6 +306,12 @@ Return ONLY a valid JSON object (no extra commentary) with the following structu
       });
 
       clearTimeout(timeoutId);
+
+      if (response.status === 404) {
+        throw new Error('Backend API endpoint not found (404). Ensure correct API_BASE_URL.');
+      } else if (response.status >= 500) {
+        throw new Error(`Backend API error (${response.status}). It might be restarting or unavailable.`);
+      }
 
       if (response.ok && response.body) {
         const reader = response.body.getReader();
