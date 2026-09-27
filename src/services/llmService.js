@@ -246,47 +246,93 @@ Return ONLY a valid JSON object (no extra commentary) with the following structu
   },
 
   /**
-   * Generates response from LLM API (Google Gemini, Mistral AI, or OpenAI compatible)
-   * with automatic failover and fallback to the BIS offline knowledge engine.
+   * Generates response from the BIS Sathi Backend API (FastAPI + Gemini server-side).
+   * Fallback chain: Backend API → Direct Gemini → Offline Knowledge Engine.
    */
   generateResponse: async (prompt, history = [], language = 'en', onChunk = null) => {
-    const envGeminiKey = import.meta.env?.VITE_GEMINI_API_KEY || import.meta.env?.VITE_LLM_API_KEY || '';
-    const envMistralKey = import.meta.env?.VITE_MISTRAL_API_KEY || '';
-    const envProvider = import.meta.env?.VITE_LLM_PROVIDER || 'gemini';
-    const envGeminiModel = import.meta.env?.VITE_GEMINI_MODEL || 'gemini-3.8-flash';
-
-    const savedProvider = storageService.getProvider();
-    const provider = savedProvider || envProvider || 'gemini';
-
-    // Build conversation history for both APIs
     const recentHistory = history.slice(-6).filter(m => m.content && m.content.trim());
 
     // ============================================================
-    // 1. Try GEMINI API first (Primary Engine when provider=gemini)
+    // 1. Try BACKEND API first (FastAPI at /api/chat — keys stay server-side)
     // ============================================================
-    const geminiKey = envGeminiKey;
-    if (geminiKey && geminiKey.length > 10 && !geminiKey.startsWith('mstrl_')) {
+    try {
+      const backendPayload = {
+        query: prompt,
+        history: recentHistory.map(m => ({ role: m.role, content: m.content })),
+        language: language,
+        context: 'general',
+        stream: true
+      };
+
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 60000);
+
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        signal: controller.signal,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(backendPayload)
+      });
+
+      clearTimeout(timeoutId);
+
+      if (response.ok && response.body) {
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder("utf-8");
+        let fullText = "";
+        let buffer = "";
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split("\n");
+          buffer = lines.pop() || "";
+
+          for (const line of lines) {
+            if (line.startsWith("data: ") && line !== "data: [DONE]") {
+              try {
+                const json = JSON.parse(line.substring(6));
+                if (json.text) {
+                  fullText += json.text;
+                  if (onChunk) onChunk(fullText);
+                }
+              } catch (e) { /* skip malformed chunks */ }
+            }
+          }
+        }
+
+        if (fullText.trim().length > 0) {
+          console.log('✅ Response from Backend API (server-side Gemini)');
+          return fullText;
+        }
+      } else {
+        const errData = await response.json().catch(() => ({}));
+        console.warn('Backend API error:', response.status, errData.detail || response.statusText);
+      }
+    } catch (err) {
+      console.warn('Backend API not available, falling back to direct Gemini:', err.message);
+    }
+
+    // ============================================================
+    // 2. Fallback: Direct Gemini API from browser (if backend is down)
+    // ============================================================
+    const envGeminiKey = import.meta.env?.VITE_GEMINI_API_KEY || import.meta.env?.VITE_LLM_API_KEY || '';
+    const envGeminiModel = import.meta.env?.VITE_GEMINI_MODEL || 'gemini-3.8-flash';
+
+    if (envGeminiKey && envGeminiKey.length > 10 && !envGeminiKey.startsWith('mstrl_')) {
       try {
-        // Use gemini-3.8-flash (latest available model)
-        const geminiModel = envGeminiModel;
-        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${geminiModel}:streamGenerateContent?alt=sse&key=${geminiKey}`;
+        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${envGeminiModel}:streamGenerateContent?alt=sse&key=${envGeminiKey}`;
 
-        // Build Gemini conversation format
         const contents = [];
-
-        // Add history
         for (const msg of recentHistory) {
           contents.push({
             role: msg.role === 'assistant' ? 'model' : 'user',
             parts: [{ text: msg.content }]
           });
         }
-
-        // Add current user prompt
-        contents.push({
-          role: 'user',
-          parts: [{ text: prompt }]
-        });
+        contents.push({ role: 'user', parts: [{ text: prompt }] });
 
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 30000);
@@ -300,10 +346,7 @@ Return ONLY a valid JSON object (no extra commentary) with the following structu
               parts: [{ text: `${bisSystemPrompt}\n\nUser Preferred Language: ${language}. Always cite relevant Indian Standards (IS numbers) where applicable.` }]
             },
             contents,
-            generationConfig: {
-              temperature: 0.3,
-              maxOutputTokens: 4096
-            }
+            generationConfig: { temperature: 0.3, maxOutputTokens: 4096 }
           })
         });
 
@@ -313,129 +356,39 @@ Return ONLY a valid JSON object (no extra commentary) with the following structu
           const reader = response.body.getReader();
           const decoder = new TextDecoder("utf-8");
           let fullText = "";
-          let buffer = "";
+          let buf = "";
 
           while (true) {
             const { done, value } = await reader.read();
             if (done) break;
-
-            buffer += decoder.decode(value, { stream: true });
-            const lines = buffer.split("\n");
-            buffer = lines.pop() || "";
-
+            buf += decoder.decode(value, { stream: true });
+            const lines = buf.split("\n");
+            buf = lines.pop() || "";
             for (const line of lines) {
               if (line.startsWith("data: ")) {
                 try {
                   const json = JSON.parse(line.substring(6));
                   const textPart = json.candidates?.[0]?.content?.parts?.[0]?.text;
-                  if (textPart) {
-                    fullText += textPart;
-                    if (onChunk) onChunk(fullText);
-                  }
-                } catch (e) { /* skip malformed chunks */ }
-              }
-            }
-          }
-
-          // Process any remaining buffer
-          if (buffer.startsWith("data: ")) {
-            try {
-              const json = JSON.parse(buffer.substring(6));
-              const textPart = json.candidates?.[0]?.content?.parts?.[0]?.text;
-              if (textPart) {
-                fullText += textPart;
-                if (onChunk) onChunk(fullText);
-              }
-            } catch (e) { }
-          }
-
-          if (fullText.trim().length > 0) return fullText;
-        } else {
-          const errData = await response.json().catch(() => ({}));
-          console.warn('Gemini API error:', response.status, errData.error?.message || response.statusText);
-        }
-      } catch (err) {
-        console.warn('Gemini streaming error, falling back to Mistral:', err.message);
-      }
-    }
-
-    // ============================================================
-    // 2. Fallback to Mistral AI 
-    // ============================================================
-    const activeMistralKey = envMistralKey || storageService.getMistralApiKey();
-    if (activeMistralKey && activeMistralKey.length > 15) {
-      try {
-        const targetUrl = 'https://api.mistral.ai/v1/chat/completions';
-        const messages = [
-          { role: "system", content: `${bisSystemPrompt}\n\nUser Preferred Language: ${language}. Always cite relevant Indian Standards (IS numbers) where applicable.` }
-        ];
-
-        for (const msg of recentHistory) {
-          messages.push({
-            role: msg.role === 'assistant' ? 'assistant' : 'user',
-            content: msg.content
-          });
-        }
-
-        messages.push({ role: "user", content: prompt });
-
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 15000);
-
-        const response = await fetch(targetUrl, {
-          method: 'POST',
-          signal: controller.signal,
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${activeMistralKey}`
-          },
-          body: JSON.stringify({
-            model: 'mistral-small-latest',
-            messages,
-            temperature: 0.25,
-            max_tokens: 2048,
-            stream: true
-          })
-        });
-
-        clearTimeout(timeoutId);
-
-        if (response.ok && response.body) {
-          const reader = response.body.getReader();
-          const decoder = new TextDecoder("utf-8");
-          let fullText = "";
-
-          while (true) {
-            const { done, value } = await reader.read();
-            if (done) break;
-
-            const chunk = decoder.decode(value, { stream: true });
-            const lines = chunk.split("\n");
-
-            for (const line of lines) {
-              if (line.startsWith("data: ") && line !== "data: [DONE]") {
-                try {
-                  const json = JSON.parse(line.substring(6));
-                  const textPart = json.choices?.[0]?.delta?.content;
-                  if (textPart) {
-                    fullText += textPart;
-                    if (onChunk) onChunk(fullText);
-                  }
+                  if (textPart) { fullText += textPart; if (onChunk) onChunk(fullText); }
                 } catch (e) { }
               }
             }
           }
 
-          if (fullText.trim().length > 0) return fullText;
+          if (fullText.trim().length > 0) {
+            console.log('✅ Response from Direct Gemini API (browser-side fallback)');
+            return fullText;
+          }
         }
       } catch (err) {
-        console.warn('Mistral live stream notice:', err.message);
+        console.warn('Direct Gemini fallback error:', err.message);
       }
     }
 
     // ============================================================
     // 3. Offline domain fallback with smooth token streaming
     // ============================================================
+    console.log('⚠️ Using offline BIS knowledge fallback');
     const fallbackContent = offlineKnowledgeFallback(prompt, language);
     let streamedText = "";
 
